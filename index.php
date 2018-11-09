@@ -1,0 +1,164 @@
+<?php
+require_once("./PageClass.php");
+
+$db = new MyDB();
+$res=$db->query("select * from product");
+while ($data=$res->fetchArray(SQLITE3_ASSOC)) $arrCart[$data['id']]=$data;
+
+$menu=[
+        ['href'=>'/','text'=>'Home','title'=>'This is TITLE'],
+        ['href'=>'/index.php','text'=>'Men','child'=>
+            [
+                ['href'=>'/index.php','text'=>'Product Detail'],
+                ['href'=>'/index.php','text'=>'Shopping Cart'],
+                ['href'=>'/index.php','text'=>'Checkout'],
+                ['href'=>'/index.php','text'=>'Order Complete'],
+                ['href'=>'/index.php','text'=>'Wishlist']
+            ]
+        ],
+        ['href'=>'/index.php','text'=>'Women'],
+        ['href'=>'/index.php','text'=>'About'],
+        ['href'=>'/index.php','text'=>'Contact']
+      ];
+
+class IndexPage extends PageClass
+{
+
+   private $CartHTML = "";
+   private $SubTotalHTML = "";
+
+    public function SetSubTotalHTML($arr)
+    {
+
+        foreach ($arr as $row => $item)
+        {
+            $Quantity+=PostDefaultVal('quantity-'.$row,1);
+            $Total+=$item['price']*PostDefaultVal('quantity-'.$row,1);
+        }
+        $Discaunt=0;
+        if ($Total>2000) $Discaunt=0.1;
+        if ($Quantity>10) $Discaunt=0.07;
+
+        $this->SubTotalHTML="<div class=\"col-sm-4 text-center\">
+                            <div class=\"total\">
+                                <div class=\"sub\">
+                                    <p><span>Сумма:</span> <span>$Total</span></p>
+                                    <p><span>Скидка:</span> <span>".($Discaunt*100)."%</span></p>
+                                    <p><span>Сумма скидки:</span> <span>".($Total*$Discaunt)."</span></p>
+                                </div>
+                                <div class=\"grand-total\">
+                                    <p><span><strong>Итого:</strong></span> <span>".($Total*(1-$Discaunt))."</span></p>
+                                </div>
+                            </div>
+                        </div>";
+
+ }
+
+    public function SetCartHTML($arr)
+    {
+
+        foreach ($arr as $row => $item)
+        {
+            $cartHTML.="<div class=\"product-cart d-flex\">
+                    <div class=\"one-forth\">
+                        <div class=\"product-img\" style=\"background-image: url(images/item-".$item['id'].".jpg);\">
+                        </div>
+                        <div class=\"display-tc\">
+                            <h3>".$item['name']."</h3>
+                        </div>
+                    </div>
+                    <div class=\"one-eight text-center\">
+                        <div class=\"display-tc\">
+                            <span class=\"price\">".$item['price']."</span>
+                        </div>
+                    </div>
+                    <div class=\"one-eight text-center\">
+                        <div class=\"display-tc\">
+                            <input type=\"text\" id=\"quantity-".$item['id']."\" name=\"quantity-".$item['id']."\" class=\"form-control input-number text-center\" value=\"".PostDefaultVal('quantity-'.$item['id'],1)."\" min=\"1\" max=\"100\">
+                        </div>
+                    </div>
+                    <div class=\"one-eight text-center\">
+                        <div class=\"display-tc\">
+                            <span class=\"price\">".(PostDefaultVal('quantity-'.$item['id'],1)*$item['price'])."</span>
+                        </div>
+                    </div>
+                    <div class=\"one-eight text-center\">
+                        <div class=\"display-tc\">
+                            <a href=\"#\" class=\"closed\"></a>
+                        </div>
+                    </div>
+                </div>";
+        }
+        $cartHTML="
+        <div class=\"row row-pb-lg\">
+            <div id='CarlList' class=\"col-md-12\">
+                <div class=\"product-name d-flex\">
+                    <div class=\"one-forth text-left px-4\">
+                        <span>Product Details</span>
+                    </div>
+                    <div class=\"one-eight text-center\">
+                        <span>Price</span>
+                    </div>
+                    <div class=\"one-eight text-center\">
+                        <span>Quantity</span>
+                    </div>
+                    <div class=\"one-eight text-center\">
+                        <span>Total</span>
+                    </div>
+                    <div class=\"one-eight text-center px-4\">
+                        <span>Remove</span>
+                    </div>
+                </div>
+                <form method='post' id='CartList'>
+                $cartHTML
+                </form>
+            </div>
+        </div>
+        
+";
+
+        $this->CartHTML=$cartHTML;
+    }
+
+    public function BodyContentHTML()
+    {
+        parent::BodyContentHTML(); // TODO: Change the autogenerated stub
+        echo "<div class=\"colorlib-product\">\n<div class=\"container\">\n";
+        echo $this->CartHTML;
+        ?>
+        <div class="row row-pb-lg">
+            <div class="col-md-12">
+                <div class="total-wrap">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="row form-group">
+                                    <div class="col-sm-3">
+                                        <input type="button" value="Пересчитать" class="btn btn-primary" onclick="$('#CartList').submit()">
+                                    </div>
+                                </div>
+                        </div>
+                        <?=$this->SubTotalHTML?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <?php
+        echo "</div>\n</div>\n";
+
+    }
+}
+
+$page = new IndexPage();
+$page->SetCartHTML($arrCart);
+$page->SetSubTotalHTML($arrCart);
+$page->SetTopMenu($menu);
+$page->SetTopLogo("My market");
+$page->SetTopSale([['href'=>'#','text'=>'25% off (Almost) Everything! Use Code: Summer Sale'],['href'=>'#','text'=>'Our biggest sale yet 50% off all summer shoes']]);
+$page->Run();
+
+
+?>
+
+
