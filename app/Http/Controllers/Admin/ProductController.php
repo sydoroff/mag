@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Orders;
 use Illuminate\Http\Request;
 use App\Products;
+use App\User;
 
-class AdminController extends Controller
+class ProductController extends Controller
 {
     //
     public function __construct()
@@ -15,44 +16,55 @@ class AdminController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
-        return view('admin.home');
+    public function index()
+    {
+        //  $pr=Products::with('getCategories')->get();
+        //  dd($pr[0]->getCategories);
+        return view('admin.products.index', ['products' => Products::with('getCategories')->paginate(5)]);
     }
 
-    public function products(){
-        return view('admin.products',['products'=>Products::paginate(5)]);
-    }
 
-    public function product($id){
-        return view('admin.product',['product'=>Products::find($id)]);
-    }
+    public function showForm($id)
+    {
+        // dd($id);
 
-    public function productEdit(Request $request){
-        dd($request->get('id'));
-        if ($request->has('id')){
-            $product = Products::find($request->get('id'));
-            $product->name=$request->get('id');
-            $product->description=$request->get('description');
-            $product->price=$request->get('price');
-            $product->save();
-            return redirect()->route('admin.productEdit',[$request->get('id')])
-                ->with('status', 'Данные сохраненны!');
+        if ($id === 'create') return view('admin.products.form');
+        $product = Products::with('getCategories')->find($id);
+
+        if ($product === null) {
+            abort(404);
         }
-        else
-            return redirect()->route('admin.products');;
 
+        return view('admin.products.form', [
+            'product' => $product
+        ]);
     }
 
-    public function orders(){
-        return view('admin.orders',['orders'=>Orders::paginate(5)]);
+
+    public function remove(Request $request)
+    {
+        $product = Products::find($request->get('id'));
+        if ($product == null) {
+            abort(404);
+        }
+        $product->delete();
+
+        return redirect()->route('admin.products.index')->with('status', 'Товар удален!');
     }
 
-    public function categories(){
+    public function save(Request $request)
+    {
+        $product = new Products();
+        if ($request->get('id')) {
+            $product = Products::find($request->get('id'));
+        }
+        $fields = ['name', 'articul', 'brand', 'description', 'price'];
 
+        $product->fill($request->only($fields));
+        $product->save();
+
+        return redirect()->route('admin.products.index')->with('status', 'Данные сохраненны!');
     }
 
-    public function users(){
-
-    }
-
+    //====================================================================================//
 }

@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role'
+        'name', 'email', 'password', 'role', 'phone'
     ];
 
     /**
@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'remember_token', 'password'
     ];
 
     /**
@@ -34,6 +34,12 @@ class User extends Authenticatable
      */
     function isAdmin(){
         return $this->role === self::roleAdmin;
+    }
+
+    function getRole()
+    {
+        if ($this->role === self::roleAdmin) return 'Администратор';
+        return 'Пользователь';
     }
 
     function getOrders(){

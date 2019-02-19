@@ -72,9 +72,9 @@
             <li class="breadcrumb-item active">Data</li>
         </ol>
     </nav>
-    <div class="container-fluid mt-4">
-        <div class="card mb-4 wow fadeIn">
-            <div class="card-body d-sm-flex justify-content-between">
+    <div class="container-fluid mt-4 text-center">
+        <div class="card mb-4 d-inline-flex justify-content-center col-sm-9">
+            <div class="card-body">
 
                     @yield('content')
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Orders;
 use Illuminate\Http\Request;
 use App\Products;
@@ -35,9 +36,8 @@ class AdminController extends Controller
             $product->price=$request->get('price');
             $product->save();
             return redirect()->route('admin.productEdit',[$request->get('id')])
-                ->with('status', 'Данные сохраненны!');;
-        }
-        else
+                ->with('status', 'Данные сохраненны!');
+        } else
             return redirect()->route('admin.products');;
 
     }

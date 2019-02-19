@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Products;
 use App\User;
 
-class ProductController extends Controller
+class CategoriesController extends Controller
 {
     //
     public function __construct()
@@ -16,25 +16,26 @@ class ProductController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
-      //  $pr=Products::with('getCategories')->get();
-      //  dd($pr[0]->getCategories);
-        return view('admin.products.index',['products'=>Products::with('getCategories')->paginate(5)]);
+    public function index()
+    {
+        //  $pr=Products::with('getCategories')->get();
+        //  dd($pr[0]->getCategories);
+        return view('admin.categories.index', ['products' => Products::with('getCategories')->paginate(5)]);
     }
 
 
     public function showForm($id)
     {
-       // dd($id);
+        // dd($id);
 
-        if ($id==='create')  return view('admin.products.form');
+        if ($id === 'create') return view('admin.categories.form');
         $product = Products::with('getCategories')->find($id);
 
         if ($product === null) {
             abort(404);
         }
 
-        return view('admin.products.form', [
+        return view('admin.categories.form', [
             'product' => $product
         ]);
     }
@@ -48,7 +49,7 @@ class ProductController extends Controller
         }
         $product->delete();
 
-        return redirect()->route('admin.products.index')->with('status', 'Товар удален!');
+        return redirect()->route('admin.categories.index')->with('status', 'Категория удалена!');
     }
 
     public function save(Request $request)
@@ -57,12 +58,12 @@ class ProductController extends Controller
         if ($request->get('id')) {
             $product = Products::find($request->get('id'));
         }
-        $fields = ['name', 'articul', 'brand','description','price'];
+        $fields = ['name', 'articul', 'brand', 'description', 'price'];
 
         $product->fill($request->only($fields));
         $product->save();
 
-        return redirect()->route('admin.products.index')->with('status', 'Данные сохраненны!');
+        return redirect()->route('admin.categories.index')->with('status', 'Данные сохраненны!');
     }
 
     //====================================================================================//

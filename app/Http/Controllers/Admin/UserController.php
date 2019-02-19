@@ -6,53 +6,59 @@ use App\Http\Controllers\Controller;
 use App\Orders;
 use Illuminate\Http\Request;
 use App\Products;
+use App\User;
 
-class AdminController extends Controller
+class UserController extends Controller
 {
-    //
-    public function __construct()
+
+    public function index()
     {
-        $this->middleware('auth');
+        $users = User::paginate(5);
+        return view('admin.users.index', [
+            'users' => $users
+        ]);
     }
 
-    public function index(){
-        return view('admin.home');
-    }
+    public function showForm($id)
+    {
+        if ($id === 'create') return view('admin.users.form');
+        $user = User::find($id);
 
-    public function products(){
-        return view('admin.products',['products'=>Products::paginate(5)]);
-    }
-
-    public function product($id){
-        return view('admin.product',['product'=>Products::find($id)]);
-    }
-
-    public function productEdit(Request $request){
-        dd($request->get('id'));
-        if ($request->has('id')){
-            $product = Products::find($request->get('id'));
-            $product->name=$request->get('id');
-            $product->description=$request->get('description');
-            $product->price=$request->get('price');
-            $product->save();
-            return redirect()->route('admin.productEdit',[$request->get('id')])
-                ->with('status', 'Данные сохраненны!');;
+        if ($user === null) {
+            abort(404);
         }
-        else
-            return redirect()->route('admin.products');;
 
+        return view('admin.users.form', [
+            'user' => $user
+        ]);
     }
 
-    public function orders(){
-        return view('admin.orders',['orders'=>Orders::paginate(5)]);
+
+    public function remove(Request $request)
+    {
+        $user = User::find($request->get('id'));
+        if ($user == null) {
+            abort(404);
+        }
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('status', 'Пользователь удален!');
     }
 
-    public function categories(){
+    public function save(Request $request)
+    {
+        $user = new User();
+        if ($request->get('id')) {
+            $user = User::find($request->get('id'));
+        }
+        $fields = ['name', 'email', 'phone', 'role'];
+        if ($request->get('pass1')) {
+            $user->password = \Hash::make($request->get('pass1'));
+        }
+        $user->fill($request->only($fields));
+        // dd($request->only($fields),$user);
+        $user->save();
 
+        return redirect()->route('admin.users.index')->with('status', 'Данные сохраненны!');
     }
-
-    public function users(){
-
-    }
-
 }
