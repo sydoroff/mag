@@ -33,7 +33,7 @@ Route::middleware(['auth', 'admin'])
         //       Route::get('/products/', 'Admin/AdminController@products')->name('products');
         //       Route::get('/product/{id}', 'Admin/AdminController@product')->where('id', '[0-9]+')->name('product');
         Route::get('/orders/', 'Admin\AdminController@orders')->name('orders');
-        Route::get('/categories/', 'Admin\AdminController@categories')->name('categories');
+        //    Route::get('/categories/', 'Admin\AdminController@categories')->name('categories');
         Route::prefix('users')
             ->name('users.')
             ->group(function () {
