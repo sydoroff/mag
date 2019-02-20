@@ -71,7 +71,8 @@
         <button class="btn btn-info my-4 btn-block" type="submit">Сохранить</button>
     </form>
     @if (isset($product))
-        <form class="text-center" method="post" action="{{route('admin.products.del')}}">
+        <form class="text-center" method="post" action="{{route('admin.products.del')}}"
+              onclick='if (!confirm("Вы уверенны в удалении {{$product->name}}?"))return false;'>
             @csrf
             <input type="hidden" name="_method" value="DELETE">
             <button class="btn btn-danger mt-4" name="id" value="{{$product->id}}">Удалить товар</button>

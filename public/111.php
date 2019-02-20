@@ -6,6 +6,6 @@
  * Time: 19:33
  */
 
-var_dump($_POST);
+file_put_contents('./222.txt', " - " . var_export($_REQUEST, TRUE) . "\n");
 
 ?>

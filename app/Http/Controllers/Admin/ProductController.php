@@ -66,5 +66,17 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('status', 'Данные сохраненны!');
     }
 
+    public function active(Request $request)
+    {
+        if ($request->get('id')) {
+            $product = Products::find($request->get('id'));
+            if ($product->publish == 1)
+                $product->publish = 0;
+            else
+                $product->publish = 1;
+            $product->save();
+            return json_encode(['pos' => $product->publish]);
+        }
+    }
     //====================================================================================//
 }

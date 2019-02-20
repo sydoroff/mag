@@ -16,6 +16,9 @@
     <link href="/public/css/mdb.min.css" rel="stylesheet">
     <!-- Your custom styles (optional) -->
     <link href="/public/css/style.css" rel="stylesheet">
+    <script type="text/javascript">
+        var secure_token = '{{ csrf_token() }}';
+    </script>
 </head>
 <body class="grey lighten-3">
 <header>
@@ -91,5 +94,6 @@
     <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="/public/js/mdb.js"></script>
+<script type="text/javascript" src="/public/js/click.js"></script>
 </body>
 </html>

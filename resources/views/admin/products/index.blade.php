@@ -38,7 +38,13 @@
                                     <td>{{ $product->price }}</td>
                                     <td class="px-0">
                                         <div class="custom-control custom-checkbox ml-2 d-inline">
-                                            <input type="checkbox" class="custom-control-input" id="defaultChecked{{ $product->id }}" checked>
+                                            <input value="{{$product->id}}"
+                                                   data-url="{{route('admin.products.active')}}" type="checkbox"
+                                                   class="custom-control-input" id="defaultChecked{{ $product->id }}"
+                                                   @if ($product->publish==1)
+                                                   checked
+                                                    @endif
+                                            >
                                             <label class="custom-control-label" for="defaultChecked{{ $product->id }}"></label>
                                         </div>
                                     </td>

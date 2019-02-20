@@ -49,6 +49,7 @@ Route::middleware(['auth', 'admin'])
                 Route::get('/{id}', 'Admin\ProductController@showForm')->where('id', '([0-9]+|create)')->name('edit');
                 Route::delete('/del/', 'Admin\ProductController@remove')->name('del');
                 Route::post('/save/', 'Admin\ProductController@save')->name('save');
+                Route::post('/active/', 'Admin\ProductController@active')->name('active');
             });
         Route::prefix('categories')
             ->name('categories.')
