@@ -28,14 +28,13 @@ Route::middleware(['auth','home'])
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
+    ->middleware('BreadCrumbs:Админ панель,admin.home')
     ->group(function () {
         Route::get('/home/', 'Admin\AdminController@index')->name('home');
-        //       Route::get('/products/', 'Admin/AdminController@products')->name('products');
-        //       Route::get('/product/{id}', 'Admin/AdminController@product')->where('id', '[0-9]+')->name('product');
-        Route::get('/orders/', 'Admin\AdminController@orders')->name('orders');
-        //    Route::get('/categories/', 'Admin\AdminController@categories')->name('categories');
+        Route::get('/orders/', 'Admin\AdminController@orders')->name('orders')->middleware('BreadCrumbs:Заказы,admin.orders.index');
         Route::prefix('users')
             ->name('users.')
+            ->middleware('BreadCrumbs:Пользователи,admin.users.index')
             ->group(function () {
                 Route::get('/', 'Admin\UserController@index')->name('index');
                 Route::get('/{id}', 'Admin\UserController@showForm')->where('id', '([0-9]+|create)')->name('edit');
@@ -44,6 +43,7 @@ Route::middleware(['auth', 'admin'])
             });
         Route::prefix('products')
             ->name('products.')
+            ->middleware('BreadCrumbs:Товары,admin.products.index')
             ->group(function () {
                 Route::get('/', 'Admin\ProductController@index')->name('index');
                 Route::get('/{id}', 'Admin\ProductController@showForm')->where('id', '([0-9]+|create)')->name('edit');
@@ -53,6 +53,7 @@ Route::middleware(['auth', 'admin'])
             });
         Route::prefix('categories')
             ->name('categories.')
+            ->middleware('BreadCrumbs:Каталог,admin.categories.index')
             ->group(function () {
                 Route::get('/', 'Admin\CategoriesController@index')->name('index');
                 Route::get('/{id}', 'Admin\CategoriesController@showForm')->where('id', '([0-9]+|create)')->name('edit');

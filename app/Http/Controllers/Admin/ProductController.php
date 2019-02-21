@@ -14,6 +14,7 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware("BreadCrumbs:Создание и редактирование товара,admin.products.edit,id=>create")->only('showForm');
     }
 
     public function index()
@@ -28,7 +29,11 @@ class ProductController extends Controller
     {
         // dd($id);
 
-        if ($id === 'create') return view('admin.products.form');
+        if ($id === 'create') {
+
+            return view('admin.products.form');
+        }
+
         $product = Products::with('getCategories')->find($id);
 
         if ($product === null) {

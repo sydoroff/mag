@@ -70,9 +70,11 @@
 <main class="pt-4 pt-sm-5">
     <nav class="mt-4 mt-sm-3" aria-label="breadcrumb">
         <ol class="breadcrumb white">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Library</a></li>
-            <li class="breadcrumb-item active">Data</li>
+            @foreach($breadcrumbs as $bc)
+                <li class="breadcrumb-item @if(!next($breadcrumbs)) active ">{{$bc['name']}}
+                    @else "><a href="{{$bc['url']}}">{{$bc['name']}}</a>
+                    @endif</li>
+            @endforeach
         </ol>
     </nav>
     <div class="container-fluid mt-4 text-center">
