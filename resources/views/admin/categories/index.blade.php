@@ -12,35 +12,29 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Название</th>
-                <th scope="col">Бренд</th>
-                <th scope="col">Каталог</th>
-                <th scope="col" class="d-none d-sm-table-cell">Описание</th>
-                <th scope="col">Цена</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Кол.товаров</th>
                 <th scope="col">&nbsp;</th>
                 <!--Пуб<span class="d-sm-none">.</span><span class="d-none d-sm-inline">ликовать</span>-->
             </tr>
             </thead>
             <tbody>
 
-            @foreach ($products as $product)
+            @foreach ($categories as $cat)
                 <tr>
-                    <th scope="row"><a href="{{route('admin.products.edit',['id'=>$product->id])}}"
-                                       class="blue-text">{{ $product->id }}<i
+                    <th scope="row"><a href="{{route('admin.categories.edit',['id'=>$cat->id])}}"
+                                       class="blue-text">{{ $cat->id }}<i
                                     class="fas fa-edit  fa-md ml-0 ml-md-2"></i></a></th>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->brand }}</td>
-                    <td>
-                        @foreach ($product->getCategories as $cat)
-                            {{$cat->name}}<br>
-                        @endforeach
-                    </td>
-                    <td class="d-none d-sm-table-cell">{{ $product->description }}</td>
-                    <td>{{ $product->price }}</td>
+                    <td>{{ $cat->name }}</td>
+                    <td>{{ $cat->description }}</td>
+                    <td>{{ $cat->getProducts->count()}} </td>
                     <td class="px-0">
                         <div class="custom-control custom-checkbox ml-2 d-inline">
-                            <input type="checkbox" class="custom-control-input" id="defaultChecked{{ $product->id }}"
-                                   checked>
-                            <label class="custom-control-label" for="defaultChecked{{ $product->id }}"></label>
+                            <input value="{{$cat->id}}" data-url="{{route('admin.categories.active')}}" type="checkbox" class="custom-control-input" id="defaultChecked{{ $cat->id }}"
+                                   @if ($cat->publish==1)
+				    checked
+				    @endif>
+                            <label class="custom-control-label" for="defaultChecked{{ $cat->id }}"></label>
                         </div>
                     </td>
 
@@ -48,9 +42,9 @@
             @endforeach
             </tbody>
         </table>
-        {{ $products->links() }}
-        <div class="text-center"><a href="{{route('admin.products.edit',['id'=>'create'])}}">
-                <button class="btn btn-indigo mt-4">Создать товар</button>
+        {{ $categories->links() }}
+        <div class="text-center"><a href="{{route('admin.categories.edit',['id'=>'create'])}}">
+                <button class="btn btn-indigo mt-4">Создать категорию</button>
             </a></div>
     </div>
 

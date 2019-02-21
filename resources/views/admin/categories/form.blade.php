@@ -7,13 +7,13 @@
             {{ session('status') }}
         </div>
     @endif
-    <form class="text-center border border-light p-5" method="post" action="{{route('admin.products.save')}}">
+    <form class="text-center border border-light p-5" method="post" action="{{route('admin.categories.save')}}">
 
         <p class="h4 mb-4">
-            @if (!isset($product))
-                Создать товар
+            @if (!isset($categories))
+                Создать категорию
             @else
-                Товар №{{$product->id}}
+                Категория №{{$categories->id}}
             @endif
         </p>
         <!--csrf-->
@@ -23,58 +23,43 @@
                 {{ session('status') }}
             </div>
     @endif
-    @if (isset($product))
+    @if (isset($categories))
         <!--Id-->
-            <input type="hidden" name="id" value="{{$product->id}}">
+            <input type="hidden" name="id" value="{{$categories->id}}">
     @endif
 
     <!-- Name -->
         <div class="form-group">
             <label for="Name">Название</label>
             <input name="name" type="text" id="Name" class="form-control mb-4"
-                   @if (isset($product))
-                   value="{{$product->name}}"
+                   @if (isset($categories))
+                   value="{{$categories->name}}"
                    @endif
-                   placeholder="Название товара">
+                   placeholder="Название категории">
         </div>
         <!-- articul -->
         <div class="form-group">
-            <label for="articul">Артикул</label>
+            <label for="articul">Описание</label>
             <input name="articul" type="text" id="articul" class="form-control mb-4"
-                   @if (isset($product))
-                   value="{{$product->articul}}"
+                   @if (isset($categories))
+                   value="{{$categories->description}}"
                    @endif
-                   placeholder="Артикул">
+                   placeholder="Описание">
         </div>
         <div class="form-group">
-            <label for="brand">Бренд</label>
-            <input name="brand" type="text" id="brand" class="form-control mb-4"
-                   @if (isset($product))
-                   value="{{$product->brand}}"
-                   @endif
-                   placeholder="Бренд">
-        </div>
-        <div class="form-group">
-            <label for="Textarea1">Описание</label>
-            <textarea name="description" class="form-control rounded-0" id="Textarea1"
-                      rows="5">@if (isset($product)){{$product->description}}@endif</textarea>
-        </div>
-        <!-- Password -->
-        <div class="form-group">
-            <label for="Price">Стоимость</label>
-            <input name="price" type="number" id="Price" class="form-control mb-2"
-                   @if (isset($product))
-                   value="{{$product->price}}"
-                   @endif
-                   placeholder="Стоимость" aria-describedby="defaultRegisterFormPasswordHelpBlock">
+            <label for="brand">Дочерний каталог</label>
+		<select>
+		    <option>Пункт 1</option>
+		    <option>Пункт 2</option>
+		</select>
         </div>
         <button class="btn btn-info my-4 btn-block" type="submit">Сохранить</button>
     </form>
     @if (isset($product))
-        <form class="text-center" method="post" action="{{route('admin.products.del')}}">
+        <form class="text-center" method="post" action="{{route('admin.categories.del')}}">
             @csrf
             <input type="hidden" name="_method" value="DELETE">
-            <button class="btn btn-danger mt-4" name="id" value="{{$product->id}}">Удалить товар</button>
+            <button class="btn btn-danger mt-4" name="id" value="{{$categories->id}}">Удалить товар</button>
         </form>
     @endif
 @endsection

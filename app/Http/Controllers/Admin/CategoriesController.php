@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Orders;
+use App\Categories;
 use Illuminate\Http\Request;
 use App\Products;
 use App\User;
@@ -20,7 +20,7 @@ class CategoriesController extends Controller
     {
         //  $pr=Products::with('getCategories')->get();
         //  dd($pr[0]->getCategories);
-        return view('admin.categories.index', ['products' => Products::with('getCategories')->paginate(5)]);
+        return view('admin.categories.index', ['categories' => Categories::with('getProducts')->paginate(5)]);
     }
 
 
@@ -29,41 +29,54 @@ class CategoriesController extends Controller
         // dd($id);
 
         if ($id === 'create') return view('admin.categories.form');
-        $product = Products::with('getCategories')->find($id);
+        $categories = Categories::with('getProducts')->find($id);
 
-        if ($product === null) {
+        if ($categories === null) {
             abort(404);
         }
 
         return view('admin.categories.form', [
-            'product' => $product
+            'categories' => $categories
         ]);
     }
 
 
     public function remove(Request $request)
     {
-        $product = Products::find($request->get('id'));
-        if ($product == null) {
+        $categories = Categories::find($request->get('id'));
+        if ($categories == null) {
             abort(404);
         }
-        $product->delete();
+        $categories->delete();
 
         return redirect()->route('admin.categories.index')->with('status', 'Категория удалена!');
     }
 
     public function save(Request $request)
     {
-        $product = new Products();
+        $categories = new Categories();
         if ($request->get('id')) {
-            $product = Products::find($request->get('id'));
+            $categories = Categories::find($request->get('id'));
         }
-        $fields = ['name', 'articul', 'brand', 'description', 'price'];
+        $fields = ['name', 'description', 'up_cat'];
 
-        $product->fill($request->only($fields));
-        $product->save();
+        $categories->fill($request->only($fields));
+        $categories->save();
 
         return redirect()->route('admin.categories.index')->with('status', 'Данные сохраненны!');
+    }
+
+    public function active(Request $request)
+    {
+        if ($request->get('id')) {
+            $categories = Categories::find($request->get('id'));
+            if ($categories->publish == 1)
+                $categories->publish = 0;
+            else
+                $categories->publish = 1;
+            $categories->save();
+            return json_encode(['pos' => $categories->publish]);
+        }
     }
 
     //====================================================================================//

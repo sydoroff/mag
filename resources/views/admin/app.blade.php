@@ -11,11 +11,11 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
     <!-- Bootstrap core CSS -->
-    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
-    <link href="/public/css/mdb.min.css" rel="stylesheet">
+    <link href="/css/mdb.min.css" rel="stylesheet">
     <!-- Your custom styles (optional) -->
-    <link href="/public/css/style.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <script type="text/javascript">
         var secure_token = '{{ csrf_token() }}';
     </script>
@@ -87,13 +87,13 @@
 </main>
     <!-- SCRIPTS -->
     <!-- JQuery -->
-    <script type="text/javascript" src="/public/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
     <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="/public/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/popper.min.js"></script>
     <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="/public/js/mdb.js"></script>
-<script type="text/javascript" src="/public/js/click.js"></script>
+    <script type="text/javascript" src="/js/mdb.js"></script>
+<script type="text/javascript" src="/js/click.js"></script>
 </body>
 </html>
