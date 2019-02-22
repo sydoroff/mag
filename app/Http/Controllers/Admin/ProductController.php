@@ -14,7 +14,6 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware("BreadCrumbs:Редактирование товара,admin.products.edit,id=>1")->only('showForm');//<- как мне сюда передать $_GET['id']?
     }
 
     public function index()
@@ -70,23 +69,5 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('status', 'Данные сохраненны!');
     }
 
-    public function active(Request $request)
-    {
-        $request->validate([
-	'id'=>'required|integer',
-	]);
-        $product = Products::find($request->get('id'));
-	if ($product==NULL){ 
-	    abort(404);
-	}
-        if ($product->publish == 1){
-            $product->publish = 0;
-	}
-        else{
-            $product->publish = 1;
-	}
-        $product->save();
-        return json_encode(['pos' => $product->publish]);
-    }
     //====================================================================================//
 }

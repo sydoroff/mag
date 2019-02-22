@@ -32,6 +32,7 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/home/', 'Admin\AdminController@index')->name('home');
         Route::get('/orders/', 'Admin\AdminController@orders')->name('orders')->middleware('BreadCrumbs:Заказы,admin.orders.index');
+
         Route::prefix('users')
             ->name('users.')
             ->middleware('BreadCrumbs:Пользователи,admin.users.index')
@@ -41,19 +42,26 @@ Route::middleware(['auth', 'admin'])
                 Route::delete('/del/', 'Admin\UserController@remove')->name('del');
                 Route::post('/save/', 'Admin\UserController@save')->name('save');
             });
+
+        Route::prefix('api')
+            ->name('api.')
+            ->group(function () {
+                Route::post('/publish/{name}', 'Admin\ApiController@publish')->where('name', 'Products|Categories')->name('publish');
+            });
+
         Route::prefix('products')
             ->name('products.')
             ->middleware('BreadCrumbs:Товары,admin.products.index')
             ->group(function () {
                 Route::get('/', 'Admin\ProductController@index')->name('index');
-                Route::get('/{id}', 'Admin\ProductController@showForm')->where('id', '([0-9]+)')->name('edit');
-			//->middleware("BreadCrumbs:Редактирование товара,admin.products.edit,id=>2");
+                Route::get('/{id}', 'Admin\ProductController@showForm')->where('id', '([0-9]+)')->name('edit')
+                    ->middleware("BreadCrumbs:Редактирование товара,admin.products.edit");
                 Route::get('/create', 'Admin\ProductController@showFormCreate')->name('create')
 			->middleware("BreadCrumbs:Создание товара,admin.products.create");
                 Route::delete('/del/', 'Admin\ProductController@remove')->name('del');
                 Route::post('/save/', 'Admin\ProductController@save')->name('save');
-                Route::post('/active/', 'Admin\ProductController@active')->name('active');
             });
+
         Route::prefix('categories')
             ->name('categories.')
             ->middleware('BreadCrumbs:Каталог,admin.categories.index')
@@ -62,7 +70,6 @@ Route::middleware(['auth', 'admin'])
                 Route::get('/{id}', 'Admin\CategoriesController@showForm')->where('id', '([0-9]+|create)')->name('edit');
                 Route::delete('/del/', 'Admin\CategoriesController@remove')->name('del');
                 Route::post('/save/', 'Admin\CategoriesController@save')->name('save');
-		Route::post('/active/', 'Admin\CategoriesController@active')->name('active');
             });
 
     });

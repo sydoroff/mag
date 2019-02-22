@@ -39,7 +39,8 @@
                                     <td class="px-0">
                                         <div class="custom-control custom-checkbox ml-2 d-inline">
                                             <input value="{{$product->id}}"
-                                                   data-url="{{route('admin.products.active')}}" type="checkbox"
+                                                   data-url="{{route('admin.api.publish',['name'=>'Products'])}}"
+                                                   type="checkbox"
                                                    class="custom-control-input" id="defaultChecked{{ $product->id }}"
                                                    @if ($product->publish==1)
                                                    checked

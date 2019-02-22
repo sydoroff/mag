@@ -12,7 +12,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Название</th>
-                <th scope="col">Описание</th>
+                <th scope="col" class="d-none d-sm-inline">Описание</th>
                 <th scope="col">Кол.товаров</th>
                 <th scope="col">&nbsp;</th>
                 <!--Пуб<span class="d-sm-none">.</span><span class="d-none d-sm-inline">ликовать</span>-->
@@ -26,11 +26,12 @@
                                        class="blue-text">{{ $cat->id }}<i
                                     class="fas fa-edit  fa-md ml-0 ml-md-2"></i></a></th>
                     <td>{{ $cat->name }}</td>
-                    <td>{{ $cat->description }}</td>
+                    <td class="d-none d-sm-inline">{{ $cat->description }}</td>
                     <td>{{ $cat->getProducts->count()}} </td>
                     <td class="px-0">
                         <div class="custom-control custom-checkbox ml-2 d-inline">
-                            <input value="{{$cat->id}}" data-url="{{route('admin.categories.active')}}" type="checkbox" class="custom-control-input" id="defaultChecked{{ $cat->id }}"
+                            <input value="{{$cat->id}}" data-url="{{route('admin.api.publish',['name'=>'Categories'])}}"
+                                   type="checkbox" class="custom-control-input" id="defaultChecked{{ $cat->id }}"
                                    @if ($cat->publish==1)
 				    checked
 				    @endif>

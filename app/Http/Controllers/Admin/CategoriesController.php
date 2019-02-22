@@ -66,18 +66,5 @@ class CategoriesController extends Controller
         return redirect()->route('admin.categories.index')->with('status', 'Данные сохраненны!');
     }
 
-    public function active(Request $request)
-    {
-        if ($request->get('id')) {
-            $categories = Categories::find($request->get('id'));
-            if ($categories->publish == 1)
-                $categories->publish = 0;
-            else
-                $categories->publish = 1;
-            $categories->save();
-            return json_encode(['pos' => $categories->publish]);
-        }
-    }
-
     //====================================================================================//
 }

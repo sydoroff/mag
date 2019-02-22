@@ -14,14 +14,14 @@ class BreadCrumbs
      * @param  \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $name = NULL, $route = NULL, $route_param = NULL)
+    public function handle($request, Closure $next, $name = NULL, $route = NULL)
     {
-        $arr = $request->Get('breadcrumbs');
-        if (!empty($route_param)) {
-            $route_param = explode('=>', $route_param);
-            $route_param = [$route_param[0] => $route_param[1]];
+        $param = NULL;
+        if ($route == $request->route()->getName()) {
+            $param = $request->route()->parameters;
         }
-        $arr[] = ['url' => route($route, $route_param), 'name' => $name];
+        $arr = $request->Get('breadcrumbs');
+        $arr[] = ['url' => route($route, $param), 'name' => $name];
         $request->attributes->Add(['breadcrumbs' => $arr]);
         View::share('breadcrumbs', $request->Get('breadcrumbs'));
         return $next($request);
