@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware("BreadCrumbs:Создание и редактирование товара,admin.products.edit,id=>create")->only('showForm');
+        $this->middleware("BreadCrumbs:Редактирование товара,admin.products.edit,id=>1")->only('showForm');//<- как мне сюда передать $_GET['id']?
     }
 
     public function index()
@@ -27,13 +27,6 @@ class ProductController extends Controller
 
     public function showForm($id)
     {
-        // dd($id);
-
-        if ($id === 'create') {
-
-            return view('admin.products.form');
-        }
-
         $product = Products::with('getCategories')->find($id);
 
         if ($product === null) {
@@ -44,6 +37,12 @@ class ProductController extends Controller
             'product' => $product
         ]);
     }
+
+    public function showFormCreate()
+    {
+        return view('admin.products.form');
+    }
+
 
 
     public function remove(Request $request)
@@ -73,15 +72,21 @@ class ProductController extends Controller
 
     public function active(Request $request)
     {
-        if ($request->get('id')) {
-            $product = Products::find($request->get('id'));
-            if ($product->publish == 1)
-                $product->publish = 0;
-            else
-                $product->publish = 1;
-            $product->save();
-            return json_encode(['pos' => $product->publish]);
-        }
+        $request->validate([
+	'id'=>'required|integer',
+	]);
+        $product = Products::find($request->get('id'));
+	if ($product==NULL){ 
+	    abort(404);
+	}
+        if ($product->publish == 1){
+            $product->publish = 0;
+	}
+        else{
+            $product->publish = 1;
+	}
+        $product->save();
+        return json_encode(['pos' => $product->publish]);
     }
     //====================================================================================//
 }

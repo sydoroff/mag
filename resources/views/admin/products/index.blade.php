@@ -54,7 +54,7 @@
                         </tbody>
                     </table>
                     {{ $products->links() }}
-                    <div class="text-center"><a href="{{route('admin.products.edit',['id'=>'create'])}}">
+                    <div class="text-center"><a href="{{route('admin.products.create')}}">
                             <button class="btn btn-indigo mt-4">Создать товар</button>
                         </a></div>
                 </div>
