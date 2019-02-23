@@ -33,7 +33,56 @@
                                         @foreach ($product->getCategories as $cat)
                                             {{$cat->name}}<br>
                                         @endforeach
-                                    </td>
+                                        <div id="1">
+                                        <button onclick="sform(this);" type="button" class="btn btn-primary btn-sm">Добавить</button>
+                                        </div>
+                                            <script type="text/javascript">
+
+let cat_data=0;
+
+function loadCat() {
+    $.ajax({
+        type: 'GET',
+        url: '{{route('admin.api.get-cat')}}',
+        dataType: 'json',
+        beforeSend: function (data) {
+        },
+        success: function (data) {
+            cat_data = data.map(function (item) {
+                return "<option>"+item['name']+"</option>";
+            });
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(thrownError);
+        },
+        complete: function (data) {
+
+        },
+        async:false
+    });
+}
+
+
+function sform(rrr) {
+''
+    let ss = $(rrr.parentNode);
+    let sq=$(rrr);
+    sq.remove();
+    if (cat_data==0) loadCat();
+    ss.append('<select></select>');
+    ss.children().append(cat_data);
+    ss.select(rform(this));
+    //alert(cat_data);
+
+}
+function rform(rrr) {
+    let ss = $(rrr.parentNode);
+    let sq=$(rrr);
+    sq.remove();
+    ss.append('<button onclick="sform(this);" type="button" class="btn btn-primary btn-sm">Добавить</button>');
+}
+                                        </script>
                                     <td class="d-none d-sm-table-cell">{{ $product->description }}</td>
                                     <td>{{ $product->price }}</td>
                                     <td class="px-0">

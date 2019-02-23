@@ -47,6 +47,7 @@ Route::middleware(['auth', 'admin'])
             ->name('api.')
             ->group(function () {
                 Route::post('/publish/{name}', 'Admin\ApiController@publish')->where('name', 'Products|Categories')->name('publish');
+                Route::get('/categories/', 'Admin\ApiController@getCategories')->name('get-cat');
             });
 
         Route::prefix('products')

@@ -55,11 +55,12 @@
         </div>
         <button class="btn btn-info my-4 btn-block" type="submit">Сохранить</button>
     </form>
-    @if (isset($product))
-        <form class="text-center" method="post" action="{{route('admin.categories.del')}}">
+    @if (isset($categories))
+        <form class="text-center" method="post" action="{{route('admin.categories.del')}}"
+              onclick='if (!confirm("Вы уверенны в удалении {{$categories->name}}?"))return false;'>
             @csrf
             <input type="hidden" name="_method" value="DELETE">
-            <button class="btn btn-danger mt-4" name="id" value="{{$categories->id}}">Удалить товар</button>
+            <button class="btn btn-danger mt-4" name="id" value="{{$categories->id}}">Удалить категорию</button>
         </form>
     @endif
 @endsection
