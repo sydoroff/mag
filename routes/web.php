@@ -24,6 +24,13 @@ Route::middleware(['auth','home'])
     });
 
 
+Route::prefix('products')
+            ->name('products.')
+            ->middleware('BreadCrumbs:Товары,admin.products.index')
+            ->group(function () {
+                Route::get('/{categories}/{name}', 'web\ProductController@index')->name('index');
+            });
+
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
@@ -31,7 +38,7 @@ Route::middleware(['auth', 'admin'])
     ->middleware('BreadCrumbs:Админ панель,admin.home')
     ->group(function () {
         Route::get('/home/', 'Admin\AdminController@index')->name('home');
-        Route::get('/orders/', 'Admin\AdminController@orders')->name('orders')->middleware('BreadCrumbs:Заказы,admin.orders.index');
+        Route::get('/orders/', 'Admin\AdminController@orders')->name('orders')->middleware('BreadCrumbs:Заказы,admin.orders');
 
         Route::prefix('users')
             ->name('users.')

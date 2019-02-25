@@ -19,13 +19,11 @@ class ApiController extends Controller
         if ($row == NULL) {
             abort(404);
         }
-        if ($row->publish == 1) {
-            $row->publish = 0;
-        } else {
-            $row->publish = 1;
-        }
+        $row->publish = !$row->publish;
         $row->save();
-        return json_encode(['pos' => $row->publish]);
+
+        return response()->json(['pos' => $row->publish],200);
+
     }
 
     public function getCategories()
